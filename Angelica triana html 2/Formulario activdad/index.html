@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+</head>
+<body>
+    <form action="../Formulario activdad/Ejercicio1.html" target="_blank"> <!--es un ejemplo para enviar datos-->
+    <!--target _blank para que se pueda abrir en otra pestaña-->
+    <form action="index.html" target="_blank">
+        <!--La etiqueta <fieldset> permite agrupar un conjunto de controles. Los navegadores muestran una caja alrededor de cada grupo de controles-->
+        <fieldset>
+            <legend>Información personal</legend>
+            <!--La etiqueta <label> permite asociar un control con un texto, de manera que mejore la accesibilidad de los formularios-->
+            <p><label>Nombre: </label><input type="text" name="nombre" /></p>
+            <p><label>Dirección: </label><input type="text" name="direccion" /></p>      
+        </fieldset>
+        <fieldset>
+            <legend>Preferencias</legend>
+            <p>
+                <label><input type="checkbox" name="arte">Arte</label><br>
+                <label><input type="checkbox" name="television">Televisión</label><br>
+                <label><input type="checkbox" name="videojuegos">Video Juegos</label><br>
+                <label><input type="checkbox" name="deportes">Deportes</label><br>
+            </p>
+        </fieldset>
+        <br>
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>
