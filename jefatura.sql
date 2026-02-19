@@ -1,10 +1,9 @@
-
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3307
--- Tiempo de generación: 19-02-2026 a las 14:04:44
+-- Tiempo de generación: 19-02-2026 a las 14:33:08
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -83,6 +82,17 @@ CREATE TABLE `caso` (
   `numero_documento_policia` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `caso`
+--
+
+INSERT INTO `caso` (`cadigo_caso`, `tipo_caso`, `descripcion`, `codigo_juzgado`, `numero_documento_policia`) VALUES
+(1, 'Robo', 'Robo simple', 1, 2001),
+(2, 'Hurto', 'Hurto vehiculo', 2, 2002),
+(3, 'Fraude', 'Fraude bancario', 3, 2003),
+(4, 'Asalto', 'Asalto armado', 4, 2004),
+(5, 'Homicidio', 'Investigacion', 5, 2005);
+
 -- --------------------------------------------------------
 
 --
@@ -142,6 +152,17 @@ CREATE TABLE `delincuente` (
   `codigo_calabozo` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `delincuente`
+--
+
+INSERT INTO `delincuente` (`numero_idetificacion`, `nombre`, `apellido`, `telefono`, `codigo_caso`, `codigo_calabozo`) VALUES
+(9001, 'Pedro', 'Lopez', '3001234567', 1, 1),
+(9002, 'Andres', 'Torres', '3019876543', 2, 2),
+(9003, 'Juan', 'Castro', '3024567890', 3, 3),
+(9004, 'Ricardo', 'Mendez', '3036547891', 4, 4),
+(9005, 'Diego', 'Morales', '3047891234', 5, 5);
+
 -- --------------------------------------------------------
 
 --
@@ -186,11 +207,11 @@ CREATE TABLE `policia` (
 --
 
 INSERT INTO `policia` (`numero_documento`, `nombre`, `apellido`, `codigo_categoria`, `funcion`, `codigo_arma`, `superior`, `codigo_caso`) VALUES
-(2001, 'Daniel', 'Rojas', 1, 'Patrullero', 1, NULL, NULL),
-(2002, 'Sofia', 'Castro', 2, 'Investigador', 2, NULL, NULL),
-(2003, 'Miguel', 'Herrera', 3, 'Oficial', 3, NULL, NULL),
-(2004, 'Valentina', 'Mendoza', 4, 'Subteniente', 4, NULL, NULL),
-(2005, 'Camilo', 'Vargas', 5, 'Capitan', 5, NULL, NULL);
+(2001, 'Daniel', 'Rojas', 1, 'Patrullero', 1, NULL, 1),
+(2002, 'Sofia', 'Castro', 2, 'Investigador', 2, NULL, 2),
+(2003, 'Miguel', 'Herrera', 3, 'Oficial', 3, NULL, 3),
+(2004, 'Valentina', 'Mendoza', 4, 'Subteniente', 4, NULL, 4),
+(2005, 'Camilo', 'Vargas', 5, 'Capitan', 5, NULL, 5);
 
 --
 -- Índices para tablas volcadas
@@ -234,8 +255,8 @@ ALTER TABLE `clase_arma`
 --
 ALTER TABLE `delincuente`
   ADD PRIMARY KEY (`numero_idetificacion`),
-  ADD KEY `fk_delincuente_caso` (`codigo_caso`),
-  ADD KEY `fk_delincuente_calabozo` (`codigo_calabozo`);
+  ADD KEY `fk_delincuente_calabozo` (`codigo_calabozo`),
+  ADD KEY `fk_delincuente_a_caso` (`codigo_caso`);
 
 --
 -- Indices de la tabla `juzgado`
@@ -250,7 +271,8 @@ ALTER TABLE `policia`
   ADD PRIMARY KEY (`numero_documento`),
   ADD KEY `fk_categoria_policia` (`codigo_categoria`),
   ADD KEY `fk_arma_policia` (`codigo_arma`),
-  ADD KEY `fk_policia_superior` (`superior`);
+  ADD KEY `fk_policia_superior` (`superior`),
+  ADD KEY `fk_policia_caso` (`codigo_caso`);
 
 --
 -- Restricciones para tablas volcadas
@@ -273,6 +295,7 @@ ALTER TABLE `caso`
 -- Filtros para la tabla `delincuente`
 --
 ALTER TABLE `delincuente`
+  ADD CONSTRAINT `fk_delincuente_a_caso` FOREIGN KEY (`codigo_caso`) REFERENCES `caso` (`cadigo_caso`),
   ADD CONSTRAINT `fk_delincuente_calabozo` FOREIGN KEY (`codigo_calabozo`) REFERENCES `calabozo` (`codigo_calabozo`),
   ADD CONSTRAINT `fk_delincuente_caso` FOREIGN KEY (`codigo_caso`) REFERENCES `caso` (`cadigo_caso`);
 
@@ -282,6 +305,7 @@ ALTER TABLE `delincuente`
 ALTER TABLE `policia`
   ADD CONSTRAINT `fk_arma_policia` FOREIGN KEY (`codigo_arma`) REFERENCES `arma` (`codigo_arma`),
   ADD CONSTRAINT `fk_categoria_policia` FOREIGN KEY (`codigo_categoria`) REFERENCES `categoria` (`codigo_categoria`),
+  ADD CONSTRAINT `fk_policia_caso` FOREIGN KEY (`codigo_caso`) REFERENCES `caso` (`cadigo_caso`),
   ADD CONSTRAINT `fk_policia_superior` FOREIGN KEY (`superior`) REFERENCES `policia` (`numero_documento`);
 COMMIT;
 
