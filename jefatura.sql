@@ -1,11 +1,12 @@
+
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 19-02-2026 a las 03:40:04
+-- Servidor: 127.0.0.1:3307
+-- Tiempo de generación: 19-02-2026 a las 14:04:44
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,9 +30,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `arma` (
   `codigo_arma` int(11) NOT NULL,
-  `referencia` varchar(20) DEFAULT NULL,
-  `descripcion` varchar(100) DEFAULT NULL,
-  `codigo_clase` int(11) DEFAULT NULL
+  `referencia` varchar(50) NOT NULL,
+  `descripcion` varchar(100) NOT NULL,
+  `codigo_clase` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -53,9 +54,20 @@ INSERT INTO `arma` (`codigo_arma`, `referencia`, `descripcion`, `codigo_clase`) 
 
 CREATE TABLE `calabozo` (
   `codigo_calabozo` int(11) NOT NULL,
-  `nombre` char(1) DEFAULT NULL,
-  `ubicacion` char(1) DEFAULT NULL
+  `nombre` varchar(100) DEFAULT NULL,
+  `ubicacion` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `calabozo`
+--
+
+INSERT INTO `calabozo` (`codigo_calabozo`, `nombre`, `ubicacion`) VALUES
+(1, 'Celda A', 'Bloque Norte'),
+(2, 'Celda B', 'Bloque Sur'),
+(3, 'Celda C', 'Bloque Este'),
+(4, 'Celda D', 'Bloque Oeste'),
+(5, 'Celda E', 'Bloque Central');
 
 -- --------------------------------------------------------
 
@@ -65,8 +77,8 @@ CREATE TABLE `calabozo` (
 
 CREATE TABLE `caso` (
   `cadigo_caso` int(11) NOT NULL,
-  `tipo_caso` char(1) DEFAULT NULL,
-  `descripcion` char(1) DEFAULT NULL,
+  `tipo_caso` varchar(20) DEFAULT NULL,
+  `descripcion` varchar(100) DEFAULT NULL,
   `codigo_juzgado` int(11) DEFAULT NULL,
   `numero_documento_policia` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -79,8 +91,19 @@ CREATE TABLE `caso` (
 
 CREATE TABLE `categoria` (
   `codigo_categoria` int(11) NOT NULL,
-  `descripcion` char(1) DEFAULT NULL
+  `descripcion` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `categoria`
+--
+
+INSERT INTO `categoria` (`codigo_categoria`, `descripcion`) VALUES
+(1, 'Patrullero'),
+(2, 'Subintendente'),
+(3, 'Intendente'),
+(4, 'Comisario'),
+(5, 'Capitán');
 
 -- --------------------------------------------------------
 
@@ -90,18 +113,18 @@ CREATE TABLE `categoria` (
 
 CREATE TABLE `clase_arma` (
   `codigo_clase` int(11) NOT NULL,
-  `descripción` varchar(100) DEFAULT NULL
+  `descripcion` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `clase_arma`
 --
 
-INSERT INTO `clase_arma` (`codigo_clase`, `descripción`) VALUES
+INSERT INTO `clase_arma` (`codigo_clase`, `descripcion`) VALUES
 (1, 'Corta'),
 (2, 'Larga'),
-(3, 'No letal'),
-(4, 'Automática'),
+(3, 'No Letal'),
+(4, 'Automatica'),
 (5, 'Especial');
 
 -- --------------------------------------------------------
@@ -112,9 +135,9 @@ INSERT INTO `clase_arma` (`codigo_clase`, `descripción`) VALUES
 
 CREATE TABLE `delincuente` (
   `numero_idetificacion` int(11) NOT NULL,
-  `nombre` char(1) DEFAULT NULL,
-  `apellido` char(1) DEFAULT NULL,
-  `telefono` int(10) DEFAULT NULL,
+  `nombre` varchar(20) DEFAULT NULL,
+  `apellido` varchar(20) DEFAULT NULL,
+  `telefono` varchar(20) DEFAULT NULL,
   `codigo_caso` int(11) DEFAULT NULL,
   `codigo_calabozo` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -127,8 +150,19 @@ CREATE TABLE `delincuente` (
 
 CREATE TABLE `juzgado` (
   `codigo_juzgado` int(11) NOT NULL,
-  `nombre_juez` char(1) DEFAULT NULL
+  `nombre_juez` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `juzgado`
+--
+
+INSERT INTO `juzgado` (`codigo_juzgado`, `nombre_juez`) VALUES
+(1, 'Juez Gomez'),
+(2, 'Juez Herrera'),
+(3, 'Juez Martinez'),
+(4, 'Juez Pardo'),
+(5, 'Juez Salazar');
 
 -- --------------------------------------------------------
 
@@ -138,12 +172,25 @@ CREATE TABLE `juzgado` (
 
 CREATE TABLE `policia` (
   `numero_documento` int(11) NOT NULL,
-  `nombre` char(1) DEFAULT NULL,
-  `apellido` char(1) DEFAULT NULL,
+  `nombre` varchar(20) DEFAULT NULL,
+  `apellido` varchar(20) DEFAULT NULL,
   `codigo_categoria` int(11) DEFAULT NULL,
-  `funcion` char(1) DEFAULT NULL,
-  `codigo_arma` int(11) DEFAULT NULL
+  `funcion` varchar(100) DEFAULT NULL,
+  `codigo_arma` int(11) DEFAULT NULL,
+  `superior` int(11) DEFAULT NULL,
+  `codigo_caso` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `policia`
+--
+
+INSERT INTO `policia` (`numero_documento`, `nombre`, `apellido`, `codigo_categoria`, `funcion`, `codigo_arma`, `superior`, `codigo_caso`) VALUES
+(2001, 'Daniel', 'Rojas', 1, 'Patrullero', 1, NULL, NULL),
+(2002, 'Sofia', 'Castro', 2, 'Investigador', 2, NULL, NULL),
+(2003, 'Miguel', 'Herrera', 3, 'Oficial', 3, NULL, NULL),
+(2004, 'Valentina', 'Mendoza', 4, 'Subteniente', 4, NULL, NULL),
+(2005, 'Camilo', 'Vargas', 5, 'Capitan', 5, NULL, NULL);
 
 --
 -- Índices para tablas volcadas
@@ -153,7 +200,8 @@ CREATE TABLE `policia` (
 -- Indices de la tabla `arma`
 --
 ALTER TABLE `arma`
-  ADD PRIMARY KEY (`codigo_arma`);
+  ADD PRIMARY KEY (`codigo_arma`),
+  ADD KEY `fk_arma_clase` (`codigo_clase`);
 
 --
 -- Indices de la tabla `calabozo`
@@ -201,7 +249,8 @@ ALTER TABLE `juzgado`
 ALTER TABLE `policia`
   ADD PRIMARY KEY (`numero_documento`),
   ADD KEY `fk_categoria_policia` (`codigo_categoria`),
-  ADD KEY `fk_arma_policia` (`codigo_arma`);
+  ADD KEY `fk_arma_policia` (`codigo_arma`),
+  ADD KEY `fk_policia_superior` (`superior`);
 
 --
 -- Restricciones para tablas volcadas
@@ -211,7 +260,7 @@ ALTER TABLE `policia`
 -- Filtros para la tabla `arma`
 --
 ALTER TABLE `arma`
-  ADD CONSTRAINT `fk_arma_clase` FOREIGN KEY (`codigo_arma`) REFERENCES `clase_arma` (`codigo_clase`);
+  ADD CONSTRAINT `fk_arma_clase` FOREIGN KEY (`codigo_clase`) REFERENCES `clase_arma` (`codigo_clase`);
 
 --
 -- Filtros para la tabla `caso`
@@ -232,7 +281,8 @@ ALTER TABLE `delincuente`
 --
 ALTER TABLE `policia`
   ADD CONSTRAINT `fk_arma_policia` FOREIGN KEY (`codigo_arma`) REFERENCES `arma` (`codigo_arma`),
-  ADD CONSTRAINT `fk_categoria_policia` FOREIGN KEY (`codigo_categoria`) REFERENCES `categoria` (`codigo_categoria`);
+  ADD CONSTRAINT `fk_categoria_policia` FOREIGN KEY (`codigo_categoria`) REFERENCES `categoria` (`codigo_categoria`),
+  ADD CONSTRAINT `fk_policia_superior` FOREIGN KEY (`superior`) REFERENCES `policia` (`numero_documento`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
