@@ -1,0 +1,16 @@
+/*En el archivo css*/
+*{
+    color: red;
+}
+
+h1{
+    color:orange;
+}
+
+.clase{
+    color:blue;
+}
+
+#idejemplo{
+    color:gray;
+}

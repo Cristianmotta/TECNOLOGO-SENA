@@ -1,0 +1,31 @@
+html{
+    background-color: sandybrown;
+}
+
+#encabezado{
+    position: absolute; /*indicmos de forma precisa la posición
+    del elemento en la página*/
+    top:0; /*top distancia entre el borde superior del elemento
+    posicionado y el borde superior del elemento contenedor*/
+    left: 0; /*distancia entre los lados izquierdos*/
+    height:10%; /*altura del contenedor elemento*/
+    width: 100%; /*ancho respecto al bloque que lo contiene*/
+    background-color: royalblue;/*color de fondo*/
+    border-bottom-left-radius: 20px;
+}
+#columna_izquierda{
+    position: absolute;
+    top: 10%; /*top distancia relativa al elemento que lo contiente*/
+    left:0;
+    height: 90%;
+    width: 20%;
+    background-color: sandybrown;
+}
+#columna_derecha{
+    position: absolute;
+    top:10%;
+    right: 0; /*distancia entre los lados derechos*/
+    bottom: 0; /*distancia entre los lados inferiores*/
+    width: 80%;
+    background-color: lightgreen;
+}

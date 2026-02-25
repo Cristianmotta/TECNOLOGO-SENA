@@ -1,0 +1,28 @@
+html{
+    background: black;
+}
+
+body {
+    background: yellowgreen;
+    width: 530px;
+    margin: 0px auto;
+    height: 100%;
+}
+
+.caja2{
+    background:yellow;
+    width: 400px;
+    height: 30px;
+    margin: 20px;
+    border: 2px solid red;
+    padding: 30px;
+}
+
+.caja1, .caja1{
+    margin: 20px;
+    background: blue;
+    width: 300px;
+    height: 200px;
+    padding: 10px;
+}
+

@@ -1,0 +1,38 @@
+html{
+    font-size: 40px;
+}
+
+.Unidadrem{
+    font-size: 4rem;
+    color: red;
+}
+
+div{
+    height: 50px;
+    font-family: Verdana;
+    font-size: 16px;
+}
+.pulgada{
+    width: 7in;
+    background: green;
+}
+.centimetro{
+    width: 7cm;
+    background: gold;
+}
+.pica{
+    width: 7pc;
+    background:brown;
+}
+.milimetros{
+    width: 7mm;
+    background: red;
+}
+.punto{
+    width: 7pt;
+    background: blue;
+}
+.pixel{
+    width: 7px;
+    background: pink;
+}

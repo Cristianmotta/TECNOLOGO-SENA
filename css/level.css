@@ -1,0 +1,22 @@
+/*En el archivo .css*/
+html{
+    background: linear-gradient(30deg, #2222 20%, #082a74 40%,  #e7d210ee  80%, #108b7b 100%);
+    height: 100%;
+}
+
+.level1{
+    width: 400px;
+    height: 400px;
+    background:red;
+    font-size: 80px;
+}
+.level2{
+    background: green;
+    width: 70%;
+    height: 70%;
+    font-size: 50%;
+}
+
+.level3{
+    background: blue;
+}
