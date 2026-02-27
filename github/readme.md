@@ -1,5 +1,9 @@
 ### Git hub parte 2
 
+mirar la rama de a la cual le realice el cambio o solo mirar la rama ````git hub git log --oneline ````
+
+cambiar un comentario de git hub de una rama ````git hub git commit  --amend -m "Tercer commit git hub Error " ```
+
 eliminaciones se utiliza para eliminar una rama ```gihub git branch -b nombre-de-la-rama ```
 
 cambiar mensaje de un commit se utiliza ```gihub git commit archivo --amend -m "nuevo mensaje" ```
