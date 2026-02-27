@@ -2,7 +2,14 @@
 
 mirar la rama de a la cual le realice el cambio o solo mirar la rama ````git hub git log --oneline ````
 
-cambiar un comentario de git hub de una rama ````git hub git commit  --amend -m "Tercer commit git hub Error " ```
+
+cambiar un comentario de git hub de una rama ````bash git commit  --amend -m "Tercer commit git hub Error " ````
+````bash
+$ git log --oneline
+$ git commit index.html --amend -m "primer archivo index"
+$ git commit  --amend -m "Tercer commit git hub Error"
+````
+
 
 eliminaciones se utiliza para eliminar una rama ```gihub git branch -b nombre-de-la-rama ```
 
@@ -91,3 +98,4 @@ Una vez resuelto el conflicto, debemos:
 git add .
 git commit -m "Conflicto resuelto" 
 ````
+
