@@ -25,4 +25,69 @@ Obviamente, si clonas un repositorio que era tuyo, podras realizar cambios en lo
 
 * Conclusion 
 
+
 Los fork nos sirve para tomar un repositorio creado por otro usuario que tanga un repositorio publico porder hacer un "clonar" ese repositorio lo que diferencia un fork y clone es que el fork nos crea un repositorio dentro de nuestro repositorio de ese ropositorio ya creado para ahora si poder realizar cambios o bajarlo con el ````clone```` 
+
+
+### Creación y Resolución de Conflictos en Git
+
+## ¿Cómo crear un conflicto en Git?
+
+Crear un conflicto en Git es un proceso sencillo. Un conflicto ocurre cuando dos ramas modifican la misma parte de un archivo y Git no puede determinar automáticamente cuál versión debe mantenerse.
+
+### Pasos para generar un conflicto
+
+1. Nos ubicamos en la rama principal:
+
+```bash
+git switch main
+
+````
+
+Realizamos un cambio en un archivo (puede ser de texto o diseño).
+
+Guardamos los cambios y realizamos un commit:
+
+````bash
+git add .
+git commit -m "Cambio realizado en main"
+````
+Creamos y cambiamos a una nueva rama:
+
+````bash
+git switch -c nombre-rama
+````
+En esta nueva rama, modificamos la misma parte del archivo que fue editada en main.
+
+Guardamos los cambios y realizamos otro commit:
+
+````bash
+git add .
+git commit -m "Cambio realizado en nombre-rama"
+````
+Finalmente, intentamos fusionar las ramas:
+
+````bash
+git switch main
+git merge nombre-rama
+````
+¿Qué sucede después?
+
+Si ambas ramas modificaron la misma línea o sección del archivo, Git generará un conflicto.
+
+En editores como Visual Studio Code, se mostrará una interfaz que permite:
+
+✅ Aceptar los cambios actuales.
+
+✅ Aceptar los cambios entrantes.
+
+✅ Aceptar ambos cambios.
+
+Editar manualmente el contenido para resolver el conflicto.
+
+Una vez resuelto el conflicto, debemos:
+
+````bash
+git add .
+git commit -m "Conflicto resuelto" 
+````
