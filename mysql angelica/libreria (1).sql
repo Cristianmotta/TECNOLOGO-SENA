@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 02-03-2026 a las 18:00:54
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 03-03-2026 a las 06:41:17
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,6 +33,8 @@ INNER JOIN tbl_autor a ON
 l.lib_numeroPaginas = a.auto_codigo 
 WHERE 
 l.lib_titulo = Nomlibro$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DELETE_libro` (`d1_libro` BIGINT(20))   DELETE FROM tbl_libro WHERE lib_isbn = d1_libro$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_listaAutores` ()   SELECT auto_codigo, auto_apellido
 FROM tbl_autor
@@ -67,6 +69,33 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_libros` ()   SELECT
 FROM tbl_prestamo
 INNER JOIN tbl_socio
 ON soc_numero = soc_CopiaNumero$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UPDATE_soc` (`up1_numero` INT(11), `up2_telefono` VARCHAR(10), `up3_direccion` VARCHAR(252))   UPDATE tbl_socio SET soc_telefono = up2_telefono,  soc_direccion = up3_direccion WHERE soc_numero = up1_numero$$
+
+--
+-- Funciones
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `dias_prestamo` (`p_idlibro` BIGINT) RETURNS INT(11) DETERMINISTIC BEGIN
+	DECLARE dias INT;
+    
+    SELECT DATEDIFF(CURDATE(), pres_fechaPrestamo)
+    INTO dias
+    FROM tbl_prestamo
+    WHERE soc_copiaNumero = p_idlibro
+    LIMIT 1;
+    
+    RETURN dias;
+ END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `total_socios` () RETURNS INT(11) DETERMINISTIC BEGIN 
+	DECLARE cantidad INT;
+    
+    SELECT COUNT(*)
+    INTO cantidad
+    FROM tbl_socio;
+    RETURN cantidad;
+    
+    END$$
 
 DELIMITER ;
 
@@ -131,8 +160,7 @@ INSERT INTO `tbl_libro` (`lib_isbn`, `lib_titulo`, `lib_genero`, `lib_numeroPagi
 (8888888888, 'La Ciudad de los Susurros', 'Misterio', 274, 1),
 (9517530862, 'Las Crónicas del Eco Silencioso', 'fantasía', 448, 7),
 (9876543210, 'El Laberinto de los Recuerdos', 'cuento', 412, 7),
-(9999999999, 'El Enigma de los Espejos Rotos', 'romance', 156, 7),
-(9788426721006, 'sql', 'ingenieria', 384, 15);
+(9999999999, 'El Enigma de los Espejos Rotos', 'romance', 156, 7);
 
 -- --------------------------------------------------------
 
@@ -194,7 +222,7 @@ INSERT INTO `tbl_socio` (`soc_numero`, `soc_nombre`, `soc_apellido`, `soc_direcc
 (10, 'Andrea', 'García', 'Calle del Sol 432, La Colina, Zaragoza', '1112345678'),
 (11, 'Alejandro', 'Torres', 'Carrera del Oeste 765, Ciudad Nueva, Murcia', '4951234567'),
 (12, 'Sofia', 'Morales', 'Avenida del Mar 098, Costa Brava, Gijón', '5512345678'),
-(22332, 'Luisa', 'garzon', 'calle 4 a 15 norte 120', '314455678');
+(22332, 'Luisa', 'garzon', 'kr 2 d n44 sur', '3110002301');
 
 -- --------------------------------------------------------
 
