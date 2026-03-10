@@ -99,3 +99,13 @@ git add .
 git commit -m "Conflicto resuelto" 
 ````
 
+
+## git flow 
+
+es un flujo de trabajo en el cual podemos seguir el controlamiento de versiones
+siguiendo diferentes ramas para llevar un control con nuestros proyectos y tener un control de ellos 
+
+### No romper Boilds 
+
+Tener un respeto por los versionamientos de las personas que realizaron cambios solo hacerlo si el grupo se reune para hacer ese control o si dejar o moificar 
+
