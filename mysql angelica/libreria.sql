@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-03-2026 a las 16:50:24
+-- Tiempo de generación: 10-03-2026 a las 03:29:50
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -98,6 +98,39 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `total_socios` () RETURNS INT(11) DET
     END$$
 
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `auditoria_autor`
+--
+
+CREATE TABLE `auditoria_autor` (
+  `aud_id` int(11) NOT NULL,
+  `old_auto_codigo` int(11) DEFAULT NULL,
+  `old_auto_apellido` varchar(45) DEFAULT NULL,
+  `old_auto_nacimiento` date DEFAULT NULL,
+  `old_auto_muerte` date DEFAULT NULL,
+  `new_auto_codigo` int(11) DEFAULT NULL,
+  `new_auto_apellido` varchar(45) DEFAULT NULL,
+  `new_auto_nacimiento` date DEFAULT NULL,
+  `new_auto_muerte` date DEFAULT NULL,
+  `accion` varchar(10) DEFAULT NULL,
+  `fecha_cambio` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `auditoria_autor`
+--
+
+INSERT INTO `auditoria_autor` (`aud_id`, `old_auto_codigo`, `old_auto_apellido`, `old_auto_nacimiento`, `old_auto_muerte`, `new_auto_codigo`, `new_auto_apellido`, `new_auto_nacimiento`, `new_auto_muerte`, `accion`, `fecha_cambio`) VALUES
+(1, 98, 'Smith', '1974-12-21', '2018-07-21', 98, 'Gomez', '0000-00-00', '0000-00-00', 'UPDATE', '2026-03-09 19:07:20'),
+(2, 98, 'Gomez', '0000-00-00', '0000-00-00', 98, 'Gomez', '0000-00-00', '0000-00-00', 'UPDATE', '2026-03-09 19:08:58'),
+(3, 98, 'Gomez', '0000-00-00', '0000-00-00', 98, 'Gomez', '0000-00-00', '0000-00-00', 'UPDATE', '2026-03-09 19:10:05'),
+(4, 98, 'Gomez', '0000-00-00', '0000-00-00', 98, 'Gomez', '0000-00-00', '0000-00-00', 'UPDATE', '2026-03-09 19:10:27'),
+(5, 98, 'Gomez', '0000-00-00', '0000-00-00', 98, 'Gomez', '0000-00-00', '0000-00-00', 'UPDATE', '2026-03-09 19:10:45'),
+(7, 98, 'Gomez', '0000-00-00', '0000-00-00', 98, 'Gomez', '0000-00-00', '0000-00-00', 'UPDATE', '2026-03-09 19:11:13'),
+(8, 98, 'Gomez', '0000-00-00', '0000-00-00', 98, 'Gomez', '0000-00-00', '0000-00-00', 'UPDATE', '2026-03-09 19:12:41');
 
 -- --------------------------------------------------------
 
@@ -204,7 +237,7 @@ CREATE TABLE `tbl_autor` (
 --
 
 INSERT INTO `tbl_autor` (`auto_codigo`, `auto_apellido`, `auto_nacimento`, `auto_muerte`) VALUES
-(98, 'Smith', '1974-12-21', '2018-07-21'),
+(98, 'Gomez', '0000-00-00', '0000-00-00'),
 (123, 'Taylor', '1980-04-15', '0000-00-00'),
 (234, 'Medina', '1977-06-21', '2005-09-12'),
 (345, 'Wilson', '1975-08-29', '0000-00-00'),
@@ -216,6 +249,56 @@ INSERT INTO `tbl_autor` (`auto_codigo`, `auto_apellido`, `auto_nacimento`, `auto
 (789, 'Rodríguez', '1985-12-10', '0000-00-00'),
 (890, 'Brown', '1982-11-17', '0000-00-00'),
 (901, 'Soto', '1979-05-13', '2015-11-05');
+
+--
+-- Disparadores `tbl_autor`
+--
+DELIMITER $$
+CREATE TRIGGER `autor_after_actualizacion` BEFORE UPDATE ON `tbl_autor` FOR EACH ROW INSERT INTO auditoria_autor(
+	old_auto_codigo,
+	old_auto_apellido,
+	old_auto_nacimiento,
+	old_auto_muerte,
+	new_auto_codigo,
+	new_auto_apellido,
+	new_auto_nacimiento,
+	new_auto_muerte,
+	accion,
+	fecha_cambio
+)
+VALUES(
+	OLD.auto_codigo,
+	OLD.auto_apellido,
+	OLD.auto_nacimento,
+	OLD.auto_muerte,
+	NEW.auto_codigo,
+	NEW.auto_apellido,
+	NEW.auto_nacimento,
+	NEW.auto_muerte,
+	'UPDATE',
+	NOW()
+)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `autor_after_eliminar` BEFORE DELETE ON `tbl_autor` FOR EACH ROW INSERT INTO auditoria_autor(
+	old_auto_codigo,
+	old_auto_apellido,
+	old_auto_nacimiento,
+	old_auto_muerte,
+	accion,
+	fecha_cambio
+)
+VALUES(
+	OLD.auto_codigo,
+	OLD.auto_apellido,
+	OLD.auto_nacimento,
+	OLD.auto_muerte,
+	'DELETE',
+	NOW()
+)
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -414,6 +497,35 @@ CURRENT_USER(),
 'Registro eliminado')
 $$
 DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `socios_before_update` BEFORE UPDATE ON `tbl_socio` FOR EACH ROW INSERT INTO audi_socio(
+socNumero_audi,
+socNombre_anterior,
+socApellido_anterior,
+socDireccion_anterior,
+socTelefono_anterior,
+socNombre_nuevo,
+socApellido_nuevo,
+socDireccion_nuevo,
+socTelefono_nuevo,
+audi_fechaModificacion,
+audi_usuario,
+audi_accion)
+VALUES(
+new.soc_numero,
+old.soc_nombre,
+old.soc_apellido,
+old.soc_direccion,
+old.soc_telefono,
+new.soc_nombre,
+new.soc_apellido,
+new.soc_direccion,
+new.soc_telefono,
+NOW(),
+CURRENT_USER(),
+'Actualización')
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -448,9 +560,58 @@ INSERT INTO `tbl_tipoautores` (`copiaISBN`, `copiaAutor`, `tipoAutor`) VALUES
 (9876543210, 567, 'Autor'),
 (9999999999, 98, 'Autor');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vista_reporte_libros_autores`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vista_reporte_libros_autores` (
+`lib_titulo` varchar(255)
+,`auto_apellido` varchar(45)
+,`auto_nacimento` date
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vista_reporte_prestamos_socios`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vista_reporte_prestamos_socios` (
+`pres_id` varchar(20)
+,`soc_numero` int(11)
+,`pres_fechaPrestamo` date
+,`pres_fechaDevolucion` date
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vista_reporte_libros_autores`
+--
+DROP TABLE IF EXISTS `vista_reporte_libros_autores`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_reporte_libros_autores`  AS SELECT `tbl_libro`.`lib_titulo` AS `lib_titulo`, `tbl_autor`.`auto_apellido` AS `auto_apellido`, `tbl_autor`.`auto_nacimento` AS `auto_nacimento` FROM (`tbl_libro` join `tbl_autor` on(`tbl_libro`.`lib_isbn` = `tbl_autor`.`auto_codigo`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vista_reporte_prestamos_socios`
+--
+DROP TABLE IF EXISTS `vista_reporte_prestamos_socios`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_reporte_prestamos_socios`  AS SELECT `tbl_prestamo`.`pres_id` AS `pres_id`, `tbl_socio`.`soc_numero` AS `soc_numero`, `tbl_prestamo`.`pres_fechaPrestamo` AS `pres_fechaPrestamo`, `tbl_prestamo`.`pres_fechaDevolucion` AS `pres_fechaDevolucion` FROM (`tbl_prestamo` join `tbl_socio` on(`tbl_prestamo`.`soc_copiaNumero` = `tbl_socio`.`soc_numero`)) ;
+
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `auditoria_autor`
+--
+ALTER TABLE `auditoria_autor`
+  ADD PRIMARY KEY (`aud_id`);
 
 --
 -- Indices de la tabla `audi_libros`
@@ -474,7 +635,8 @@ ALTER TABLE `tbl_autor`
 -- Indices de la tabla `tbl_libro`
 --
 ALTER TABLE `tbl_libro`
-  ADD PRIMARY KEY (`lib_isbn`);
+  ADD PRIMARY KEY (`lib_isbn`),
+  ADD KEY `index_tabla_libro` (`lib_titulo`);
 
 --
 -- Indices de la tabla `tbl_prestamo`
@@ -500,6 +662,12 @@ ALTER TABLE `tbl_tipoautores`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
+
+--
+-- AUTO_INCREMENT de la tabla `auditoria_autor`
+--
+ALTER TABLE `auditoria_autor`
+  MODIFY `aud_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `audi_libros`
@@ -530,6 +698,18 @@ ALTER TABLE `tbl_prestamo`
 ALTER TABLE `tbl_tipoautores`
   ADD CONSTRAINT `tbl_tipoautores_ibfk_1` FOREIGN KEY (`copiaAutor`) REFERENCES `tbl_autor` (`auto_codigo`),
   ADD CONSTRAINT `tbl_tipoautores_ibfk_2` FOREIGN KEY (`copiaISBN`) REFERENCES `tbl_libro` (`lib_isbn`);
+
+DELIMITER $$
+--
+-- Eventos
+--
+CREATE DEFINER=`root`@`localhost` EVENT `eliminar_prestamo` ON SCHEDULE EVERY 1 DAY STARTS '2026-07-29 09:00:00' ENDS '2026-09-20 19:00:00' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+
+DELETE FROM tbl_prestamo
+WHERE pres_fechaPrestamo < DATE_SUB(NOW(), INTERVAL 30 DAY);
+END$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
