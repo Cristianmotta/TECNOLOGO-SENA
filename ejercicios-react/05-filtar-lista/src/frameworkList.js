@@ -1,0 +1,16 @@
+export default [
+    'React',
+    'Angular',
+    'Vue',
+    'Svelte',
+    'Ember',
+    'Bacbone',
+    'Polymer',
+    'Aurelia',
+    'Meteor',
+    'Nokout',
+    'Riot',
+    'Cycle',
+    'Elm',
+    'Preact',
+]
