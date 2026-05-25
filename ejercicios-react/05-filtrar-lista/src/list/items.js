@@ -4,13 +4,13 @@ export default [
     'Vue',
     'Svelte',
     'Ember',
-    'Bacbone',
+    'Backbone',
     'Polymer',
     'Aurelia',
     'Meteor',
-    'Nokout',
+    'Knockout',
     'Riot',
     'Cycle',
     'Elm',
-    'Preact',
-]
+    'Preact'
+] 
